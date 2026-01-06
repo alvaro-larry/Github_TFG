@@ -2,30 +2,34 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parámetros
-r = 0.1       # tasa intrínseca (>0)
-K = 1000.0    # capacidad de carga (>0)
+r = 0.1
+K = 1000.0
 t_max = 100
 t = np.linspace(0, t_max, 400)
 
-# Valores iniciales: dos N0<K, el caso N0=K, dos N0>K
-N0_list = [100.0, 500.0, 1500.0, 2000.0]
+# Valores iniciales (ordenados como las curvas)
+N0_values = [2000.0, 1500.0, 500.0, 100.0]
+
+# Configuración general de tamaño de fuente
+plt.rcParams.update({'font.size': 14})
 
 def logistic_N(t, r, K, N0):
-    # Solución analítica: N(t) = K / (1 + A e^{-r t}), A = (K-N0)/N0
     A = (K - N0) / N0
     return K / (1 + A * np.exp(-r * t))
 
-# Gráfica t vs N(t)
-plt.figure()
-for N0 in N0_list:
+# Gráfica N(t)
+plt.figure(figsize=(7,5))
+for N0 in N0_values:
     N = logistic_N(t, r, K, N0)
     plt.plot(t, N, label=fr"$N_0 = {N0:g}$")
-# línea horizontal en K para referencia
-plt.axhline(K, color="k", linestyle="--", linewidth=0.7, label="K=1000")
-plt.xlabel("Tiempo (años)")
+
+# Línea de referencia en K
+plt.axhline(K, linestyle="--", linewidth=1.0, color='purple', label=r"$K=1000$")
+
+plt.xlabel("Tiempo")
 plt.ylabel("Población")
 plt.grid(True)
-plt.legend()
+plt.legend(edgecolor='black' )
 plt.tight_layout()
-plt.savefig(r"g:\Mi unidad\UCM\5º 2\TFG Física\logistico_multi_N.png", dpi=600, bbox_inches="tight")
+plt.savefig("logistico_multi_N.png", dpi=800)
 plt.show()
